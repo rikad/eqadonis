@@ -1,0 +1,82 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Accreditation List
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li {%if tab==null %}class="active"{%endif%}><a href="/accreditation/">View All</a></li>
+    <li {%if tab==1 %}class="active"{%endif%}><a href="#">S1</a></li>
+    <li {%if tab==1 %}class="active"{%endif%}><a href="#">S2</a></li>
+    <li {%if tab==1 %}class="active"{%endif%}><a href="#">S3</a></li>
+    <li {%if tab==1 %}class="active"{%endif%}><a href="/accreditation/addNew/"><span class="glyphicon glyphicon-plus-sign"></span> Add New</a></li>
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+<h3>Accreditation List</h3>
+{%if tab==0 or tab==null %}
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Accreditation</th>
+		<th>Level</th>
+		<th>Year</th>
+		<th>Description</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% if list==null %}
+			<tr><td>Data Empty</tr>
+		{%else%}
+			{% for item in list %}
+		
+			<tr>
+				{% set link='/accreditation/template/'+item.borang_id %}
+				<td>{{i}}</td>
+				<td>{{item.title}}</td>
+				<td>S{{item.level_id}}</td>
+				<td>{{item.year}}</td>
+				<td>{{item.description}}</td>
+				<td>
+
+				{%if item.borang_id==null%}
+				<a href='/accreditation/signAccreditation/{{item.id}}' class="label label-danger">Not yet created. Create Now?</a>
+				{%else%}
+				<a href='{{link}}' class="label label-success">Manage</a> 
+				{%endif%}
+				</td>
+			</tr>
+			{% set i=i+1 %}
+			{% endfor %}
+		{%endif%}
+	</tbody>
+	</table>
+{% endif %}
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

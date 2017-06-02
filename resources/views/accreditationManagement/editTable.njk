@@ -1,0 +1,102 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+<div class="well shallow-well">
+    <span class="filter-link-list">
+        Modify Template Section
+    </span>
+</div>
+
+<ul class="nav nav-tabs">   
+    
+                    <li><a href="/accreditationManagement/templateStructure/{{template_id}}"><< Back to Template Structure</a></li>
+                    <li><a href="/accreditationManagement/editSection/{{id}}">Section Info</a></li>
+                    {%if section.format=='table'%}
+                    <li  class=active><a href="/accreditationManagement/editTable/{{id}}">Table Columns</a></li>
+                    {%endif%}
+    
+    </ul>
+    <br>
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+<table id="tableView" class="table table-striped user-table">
+    <thead><tr>
+        <th>No</th>
+        <th>Column Name</th>
+        <th>Type</th>
+        <th>Action</th>
+    </tr></thead>
+    <tbody>
+    
+            {%if columns==""%}No Columns Found, add new first
+            {%else%}
+                {% set i=1 %}
+                {%for item in columns%}
+                    <tr><td>{{i}}
+                    <td>{{item.title}}
+                    <td>{{item.type}}
+                    <td>
+                    {%if item.title!='id' and item.title!='created_at' and item.title!='updated_at' and item.title!='organization_id' %}
+
+                    <form class="form-horizontal" role="form" method="POST" action="/accreditationManagement/deleteColumn/{{id}}">{{ csrfField }}
+                    <input type=hidden name=column value='{{item.title}}'>
+                    <button type="submit" class="btn btn-danger btn-xs">
+                                    <i class="label label-danger"></i> Delete Column
+                                </button>
+                                </form>
+                    {%endif%}
+                    </tr>
+                    {% set i=i+1 %}
+                {%endfor%}
+            {%endif%}
+
+<tr>
+            <form class="form-horizontal" role="form" method="POST" action="/accreditationManagement/addColumn/{{id}}">
+
+                       
+                        {{ csrfField }}
+                       
+
+                        <td>
+   <td><input id="title" type="text" name="title" required placeholder="New Column Name">
+    <td>   <input type=hidden name=parent value={{parent}}>
+                            
+                                 <select name="type" required>
+                                    <option value="text">Text</option>
+                                    <option value="int">Integer</option>
+                                    <option value="datetime">DateTime</option>
+                                </select> 
+                            
+                        
+
+                        
+                        <td>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Save
+                                </button>
+                            </tr>
+                
+                    </form>
+                    </table>
+{%endif%}
+</div></div></div></div>
+{% endblock %}

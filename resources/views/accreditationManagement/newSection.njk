@@ -1,0 +1,110 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+<div class="well shallow-well">
+    <span class="filter-link-list">
+        Create New Template Section
+    </span>
+</div>
+
+<ul class="nav nav-tabs">   
+    
+                    <li><a href="/accreditationManagement/templateStructure/{{id}}"><< Back to Template Structure</a></li>
+                    <li class=active><a href="#">Add New</a></li>
+    
+    </ul>
+    <br>
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+                    <form class="form-horizontal" role="form" method="POST" action="/accreditationManagement/newChildren/{{id}}">
+
+                       
+                        {{ csrfField }}
+                       
+
+
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Title</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="title" required>
+                            </div>
+                        </div>
+
+
+                        {%if parent != null%}<div class="form-group">
+                            <input type=hidden name=parent value={{parent}}>
+                            <label for="tag" class="col-md-4 control-label">Type</label>
+
+                            <div class="col-md-6">
+                                 <select name="type" required>
+                                    <option value="note">Note</option>
+                                    <option value="table">Table</option>
+                                    <option value="link">Sub Section</option>
+                                </select> 
+                            </div>
+                        </div>
+
+                        {%endif%}
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Description</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Tooltip</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="tooltip"></textarea>
+                            </div>
+                        </div>
+
+                        
+
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Save
+                                </button>
+                            </div>
+                        </div>
+
+
+		        {% if error %}
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+								<div class="alert alert-warning">
+								  <strong>Error!</strong> {{ error }}
+								</div>
+			    			</div>
+						</div>
+				{% endif %}
+                
+                    </form>
+{%endif%}
+</div></div></div></div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Module Management
+	</span>
+</div>
+
+<!--<ul class="nav nav-tabs">
+	<li {%if tab==0 %}class="active"{%endif%}><a href="/userManagement/">Manage Access By Position</a></li>
+    <li {%if tab==2 %}class="active"{%endif%}><a href="/userManagement/index/2">Manage Access By Account</a></li>
+    {%if tab==2 %}<li><a href="/userManagement/addNew/">Add New User</a></li>{%endif%}
+</ul>
+<br>-->
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+{%if newModule!=0%}
+<h3>New Modules scanned:</h3>
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Module</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for query in newModule %}
+		
+		<tr>
+			<td>{{i}}</td>
+			<td>{{query}}</td>
+			<td>
+				<form class="form-horizontal" role="form" method="POST" action="/moduleManagement/new/">
+                      {{ csrfField }}
+                      <input type=hidden name=moduleName value={{query}} />
+                      		<button type="submit" class="btn btn-primary btn-xs">
+                            	<i class="fa fa-btn fa-user"></i> Install?
+                            </button>
+                </form></td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{%endif%}
+
+<h3>Detected Modules</h3>
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Module</th>
+		<th>Description</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for query in oldModule %}
+		
+		<tr>
+			{% set link='/moduleManagement/manage/'+query.id %}
+			<td>{{i}}</td>
+			<td><a href='{{link}}'>{{query.module}}</a></td>
+			<td></td>
+			<td><a href='{{link}}' class="label label-success">Manage</a></td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Borang BAN-PT Tingkat Sarjana untuk Program Studi
+	</span>
+</div>
+
+<!--<ul class="nav nav-tabs">
+	<li {%if tab==0 %}class="active"{%endif%}><a href="/userManagement/">Manage Access By Position</a></li>
+    <li {%if tab==2 %}class="active"{%endif%}><a href="/userManagement/index/2">Manage Access By Account</a></li>
+    {%if tab==2 %}<li><a href="/userManagement/addNew/">Add New User</a></li>{%endif%}
+</ul>
+<br>-->
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+ <div class="row">
+  <div class="col-sm-3">
+  	<div>
+        <div class="no-padding well">
+         <div class="panel-group" id="accordion">
+            
+            	{% for item in tree %}
+        	    	<!--<div class="panel panel-default">
+    					<div class="panel-heading">
+      						<h4 class="panel-title">
+        					<a data-toggle="collapse" data-parent="#accordion" href="#collapse{{item.id}}">
+        					Standar {{item.no}}</a>
+      						</h4>
+    					</div>
+    					<div id="collapse{{item.id}}" class="panel-collapse collapse in">
+      						<div class="panel-body">
+      							{{item.title}}
+      							{%if item.children!=null%}
+								<ul class="nav nav-list tree">
+									{% for item2 in item.children %}
+										<li><a href='/BAN-PT_S1_Prodi/index/{{item2.id}}'>{{item2.title}}</a></li>
+									{%endfor%}
+								</ul>
+								{%endif%}		
+      						</div></div></div>-->
+
+            		<ul class="nav nav-list">
+					<li><label class="tree-toggle nav-header">{{item.title}}</label>
+						{%if item.children!=null%}
+							<ul class="nav nav-list tree">
+								{% for item2 in item.children %}
+									<li><a href='/BAN-PT_S1_Prodi/index/{{item2.id}}'>{{item2.title}}</a></li>
+								{%endfor%}
+							</ul>
+						{%endif%}
+					</li>
+					<li class="divider"></li>
+					</ul>
+				{% endfor %}
+            </div>
+	<!--<table class="tree">
+		{% for item in tree %}
+			<tr class="treegrid-1">
+				<td>{{item.title}}</td>
+			</tr>
+		{% endfor %}
+		<tr class="treegrid-1">
+			<td>Root node</td>
+		</tr>
+		<tr class="treegrid-2 treegrid-parent-1">
+			<td>Node 1-1</td>
+		</tr>
+		<tr class="treegrid-3 treegrid-parent-1">
+			<td>Node 1-2</td>
+		</tr>
+		<tr class="treegrid-4 treegrid-parent-3">
+			<td>Node 1-2-1</td>
+		</tr>
+	</table>-->
+	</div></div></div>
+  	<div class="col-sm-9">
+
+
+<h3>{{section.prefix}} {{section.title}}
+{% if section.tooltip != null %}
+{% if section.tooltip != "" %}
+<span data-toggle="tooltip" title="{{section.tooltip}}" class="glyphicon glyphicon-question-sign"></span>
+
+{% endif %}{% endif %}
+</h3>
+
+	{%if section.type==null or section.type=='link' %}
+		{% for item in form %}
+			<div class="well no-padding" id={{item.id}}>
+			{{section.prefix}}{{item.title}}<br><br>
+			{%if item.format=='note'%}
+				<div>
+				<form method="POST" action="/BAN-PT_S1_Prodi/addNote/{{item.id}}">
+					{{ csrfField }}
+					<input name="content" type="hidden">
+      				<div id="editor-container" style="background-color: #fff;">
+        
+      				</div>
+    			
+    				<br>
+      				<button class="btn btn-primary" type="submit">Save</button>
+    			
+    			</form>
+    			</div>
+				<!--<textarea></textarea><br><button>Save</button>-->
+			{%endif%}
+			</div>
+		{%endfor%}
+	{% endif %}
+
+	{%if section.type=='note' %}
+		<div class="well no-padding" id={{section.id}}>
+			{{section.description | safe}}<br><br>
+			<div>
+				<form method="POST" action="/BAN-PT_S1_Prodi/addNote/{{section.id}}">
+					{{ csrfField }}
+					<input name="content" type="hidden">
+      				<div id="editor-container" style="background-color: #fff;">
+        				
+      				</div>
+    			
+    				<br>
+      				<button class="btn btn-primary" type="submit">Save</button>
+    			
+    			</form>
+    			</div>
+				<!--<textarea></textarea><br><button>Save</button>-->
+		</div>
+	{% endif %}
+
+	{%if section.type=='table' %}
+		<div class="well no-padding" id={{section.id}}>
+			{{section.description}}<br>
+			<a href=/BAN-PT_S1_Prodi/table/{{section.model}} target="_blank">Click here to access table {{section.prefix}}</a>
+		</div>
+	{% endif %}
+{% endif %}
+</div>
+</div>
+
+</div></div></div></div>
+
+
+{% endblock %}
+
+
+{% block js %}
+	<script src="//cdn.quilljs.com/1.2.3/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.2.3/quill.min.js"></script>
+    <link href="//cdn.quilljs.com/1.2.3/quill.snow.css" rel="stylesheet">
+
+	<script type="text/javascript">
+	    var quill = new Quill('#editor-container', {
+            modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block', 'image'],
+                [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+            },
+            placeholder: 'Write the text here...',
+            theme: 'snow'
+        });
+        quill.setContents({{content[0].content | safe }})
+
+        var form = document.querySelector('form');
+            form.onsubmit = function() {
+            // Populate hidden form on submit
+            var about = document.querySelector('input[name=content]');
+            about.value = JSON.stringify(quill.getContents());
+  
+            console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+  
+            // No back end to actually submit to!
+            //alert('Open the console to see the submit data!')
+            //return false;
+        };
+	</script>
+{% endblock %}

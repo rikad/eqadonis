@@ -1,0 +1,57 @@
+'use strict'
+
+/*
+|--------------------------------------------------------------------------
+| Router
+|--------------------------------------------------------------------------
+|
+| AdonisJs Router helps you in defining urls and their actions. It supports
+| all major HTTP conventions to keep your routes file descriptive and
+| clean.
+|
+| @example
+| Route.get('/user', 'UserController.index')
+| Route.post('/user', 'UserController.store')
+| Route.resource('user', 'UserController')
+*/
+
+const Route = use('Route')
+
+const Helpers = use('Helpers')
+const Ioc = require('adonis-fold').Ioc
+
+Route.on('/').render('welcome')
+Route.get('/login', 'AuthController.index')
+Route.post('/login', 'AuthController.login')
+Route.get('/logout', 'AuthController.logout')
+
+Route.any('/:controller/:action/*', function * (request, response) {
+  const controller = request.param('controller').charAt(0).toUpperCase() + request.param('controller').slice(1)
+  var action = request.param('action')
+  if(action==''){action='index'}
+
+  const controllerPath = `${Helpers.appNameSpace()}/Http/Controllers`
+  const controllerInstance = Ioc.makeFunc(`${controllerPath}/${controller}Controller.${action}`)
+  yield controllerInstance.instance[controllerInstance.method](request, response)
+})
+
+/*
+Route.any('/:controller/:action', function * (request, response) {
+  const controller = request.param('controller').charAt(0).toUpperCase() + request.param('controller').slice(1)
+  const action = request.param('action')
+  const controllerPath = `${Helpers.appNameSpace()}/Http/Controllers`
+  const controllerInstance = Ioc.makeFunc(`${controllerPath}/${controller}Controller.${action}`)
+  yield controllerInstance.instance[controllerInstance.method](request, response)
+})
+
+
+
+/*Route.get('/register', 'RegisterController.index')
+Route.post('register', 'RegisterController.doRegister')
+
+Route.get('/users', 'UserController.index')
+Route.get('/users/edit/:id', 'UserController.profile')
+Route.post('/users/edit/:id', 'UserController.profileSave')
+Route.post('/users/index/:index', 'UserController.index')
+Route.get('/users/ajax', 'UserController.ajax')
+*/

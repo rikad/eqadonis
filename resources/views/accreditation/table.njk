@@ -1,0 +1,133 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Borang BAN-PT Tingkat Sarjana untuk Program Studi
+	</span>
+</div>
+
+<div class="well shallow-well">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-8">
+              <form method="POST" action="/accreditation/excel/" enctype="multipart/form-data">
+              {{ csrfField }}
+            <input type="hidden" name="id" value="{{ section.id }}">
+            <input type="hidden" name="sheet" value="{{ prefix }}">
+
+              Import Excel
+            <div class="input-group">
+              <input id="msg" type="file" class="form-control" name="file">
+              <span class="input-group-addon">{{ form.submit('Upload') }}</span>
+            </div>
+              {{ form.close() }}
+
+        </div>
+    </div>
+</div>
+
+<!--<ul class="nav nav-tabs">
+	<li {%if tab==0 %}class="active"{%endif%}><a href="/userManagement/">Manage Access By Position</a></li>
+    <li {%if tab==2 %}class="active"{%endif%}><a href="/userManagement/index/2">Manage Access By Account</a></li>
+    {%if tab==2 %}<li><a href="/userManagement/addNew/">Add New User</a></li>{%endif%}
+</ul>
+<br>-->
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+<div class="row">
+<div class="col-sm-12">
+
+
+<h3>Table {{prefix}} {{section.title}}
+
+{% if section.tooltip != null %}
+{% if section.tooltip != "" %}
+<span data-toggle="tooltip" title="{{section.tooltip}}" class="glyphicon glyphicon-question-sign"></span>
+
+{% endif %}{% endif %}
+
+
+</h3>
+		<div class="well no-padding pre-scrollable" id={{section.id}}>
+		{%if section.description!=""%}
+			{{section.description | safe}}<br>{%endif%}
+			
+			{% if columns != null%}
+			<table id="tableView" class="table table-striped user-table">
+    			<thead><tr>
+        			{%for item in columns%}
+        				<th>{{item | replace("_"," ")}}
+        			{%endfor%}
+                    <th>
+
+    			</tr></thead>
+                <tbody>
+                    {%for item in content%}
+                        <tr>
+
+                        {%if item.id==selected%}
+                        <form class="form-horizontal" role="form" method="POST" action="/accreditation/updateRow/">
+                        {{ csrfField }}
+                        <input type=hidden name=id value={{section.id}}>
+                        <input type=hidden name=rowId value={{item.id}}>
+                        {%for column in columns%}
+                        <td><input type=text name={{column}} value='{{item[column]}}'></input>
+                        {%endfor%}
+                        <td>
+                        <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Update
+                                </button></form>    
+                                <a href='/accreditation/table/{{section.id}}' class="label label-danger button-xl">Cancel</a>
+                        {%else%}
+                        {%for column in columns%}
+                        <td>{{item[column]}}
+                        {%endfor%}
+                        <td>
+                        <a href='/accreditation/table/{{section.id}}/{{item.id}}' class="label label-warning">Edit</a>
+                        <a href='/accreditation/deleteRow/{{section.id}}/{{item.id}}' class="label label-danger">Delete</a>
+                        {%endif%}
+
+
+                    {%endfor%}
+
+                    <tr>
+                    <form class="form-horizontal" role="form" method="POST" action="/accreditation/newRow/">
+                        {{ csrfField }}
+                        <input type=hidden name=id value={{section.id}}>
+                        {%for column in columns%}
+                        <td><input type=text name={{column}}></input>
+                        {%endfor%}
+                        <td>
+                        <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Add New
+                                </button></form>
+    		</table>
+    		{%endif%}
+        {% endif %}
+		</div>
+</div>
+</div>
+
+</div></div></div></div>
+
+
+{% endblock %}

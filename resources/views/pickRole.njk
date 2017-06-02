@@ -1,0 +1,48 @@
+{% extends 'master' %}
+
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">Pick Your Role</div>
+                <div class="panel-body">
+
+                    <table id="tableView" class="table table-striped user-table">
+                        <thead><tr>
+                              <th>ID</th>
+                              <th>Person</th>
+                              <th>Position</th>
+                              <th>Organization</th>
+                              <th></th>
+                        </tr></thead>
+                        <tbody>
+                        
+                        <tr>
+                        <td>1</td>
+                        <td>{{currentUser.display_name}}</td>
+                        <td><a href='/pick_role/basic'>{{basic.role_name}} (Basic Role)</a></td>
+                        <td>--</td>
+                        <td><a href='/pick_role/basic' class="label label-success">Enter</a></td>
+                        </tr>{% set i=i+1 %}
+
+                        {% set i=2 %}
+                        {% for officer in officers %}
+                        <tr>
+                        <td>{{i}}</td>
+                        <td>{{officer.name}}</td>
+                        <td><a href='/pick_role/{{officer.id}}'>{{officer.position}}</a></td>
+                        <td>{{officer.organization}}</td>
+                        <td><a href='/pick_role/{{officer.id}}' class="label label-success">Enter</a></td>
+                        </tr>{% set i=i+1 %}
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

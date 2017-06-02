@@ -1,0 +1,59 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Role Access Management of {{person.name}} by <b>Users Manager</b>
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="/userManagement/">List of People</a></li>
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Name</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for person in people %}
+		
+		<tr>
+			{% set link='/userManagement/person/'+person.id %}
+			<td>{{i}}</td>
+			<td><a href='{{link}}'>{{person.name}}</a></td>
+			<td><a href='{{link}}' class="label label-success">Manage</a></td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

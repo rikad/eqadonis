@@ -1,0 +1,123 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+<div class="well shallow-well">
+    <span class="filter-link-list">
+        Modify Template Section
+    </span>
+</div>
+
+<ul class="nav nav-tabs">   
+    
+                    <li><a href="/accreditationManagement/templateStructure/{{template_id}}"><< Back to Template Structure</a></li>
+                    <li class=active><a href="/accreditationManagement/editSection/{{id}}">Section Info </a></li>
+                    {%if section.format=='table'%}
+                    <li><a href="/accreditationManagement/editTable/{{id}}">Table Columns</a></li>
+                    {%endif%}
+    
+    </ul>
+    <br>
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+                    <form class="form-horizontal" role="form" method="POST" action="/accreditationManagement/updateSection/{{id}}">
+
+                       
+                        {{ csrfField }}
+                       
+
+
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Title</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="title" required value="{{section.title}}">
+                            </div>
+                        </div>
+
+
+                        {%if parent != null%}<div class="form-group">
+                            <input type=hidden name=parent value={{parent}}>
+                            <label for="tag" class="col-md-4 control-label">Type</label>
+
+                            <div class="col-md-6">
+                                 <select name="type" required>
+                                    <option value="link" {%if section.format=='link'%}selected{%endif%}>Sub Section</option>
+                                    <option value="note" {%if section.format=='note'%}selected{%endif%}>Note</option>
+                                    <option value="table" {%if section.format=='table'%}selected{%endif%}>Table</option>
+                                </select> 
+                            </div>
+
+                            
+                        </div>
+
+                        {%if section.format!='link'%}
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Model</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="title" disabled value="{{section.model}}">
+                            </div>
+                        </div>{%endif%}
+                        {%endif%}
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Description</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="description">{{section.description}}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Tooltip</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="tooltip">{{section.tooltip}}</textarea>
+                            </div>
+                        </div>
+
+                        
+
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Save
+                                </button>
+                            </div>
+                        </div>
+
+
+		        {% if error %}
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+								<div class="alert alert-warning">
+								  <strong>Error!</strong> {{ error }}
+								</div>
+			    			</div>
+						</div>
+				{% endif %}
+                
+                    </form>
+{%endif%}
+</div></div></div></div>
+{% endblock %}

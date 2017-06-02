@@ -1,0 +1,95 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Role Access Management of {{person.name}}
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li {%if tab==0 %}class="active"{%endif%}><a href="/userManagement/">Manage Access By Position</a></li>
+    <li {%if tab==2 %}class="active"{%endif%}><a href="/userManagement/index/2">Manage Access By Account</a></li>
+    {%if tab==2 %}<li><a href="/userManagement/addNew/">Add New User</a></li>{%endif%}
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+{%if tab==0 %}
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Position</th>
+		<th>Organization</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for query in queries %}
+		
+		<tr>
+			{% set link='/userManagement/officer/'+query.id %}
+			<td>{{i}}</td>
+			<td><a href='{{link}}'>{{query.position}}</a></td>
+			<td>{{query.organization}}</td>
+			<td><a href='{{link}}' class="label label-success">Manage</a></td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{% else %}
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Account</th>
+		<th>isPrimary?</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for query in queries %}
+		
+		<tr>
+			{% set link='/userManagement/account/'+query.user_id %}
+			<td>{{i}}</td>
+			<td><a href='{{link}}'>{{query.username}}</a></td>
+			<td>
+			{%if query.is_primary==1 %}
+				<span class="label label-success">Primary Account</span>
+			{% else %}
+				<a href='/userManagement/primary/{{query.user_id}}' class="label label-danger">Not Primary. Set to primary?</a>
+			{%endif%}
+			</td><td>
+			<a href='/userManagement/edit/{{query.user_id}}' class="label label-warning">
+			Edit Info</a>
+			<a href='{{link}}' class="label label-success">Manage</a></td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{% endif %}
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+	{% if todo.tag_id%3 == 0 %}
+				{% set type = 'success' %}
+			{% elif todo.tag_id%3 == 1 %}
+				{% set type = 'warning' %}
+			{% else %}
+				{% set type = 'danger' %}
+			{% endif %}
+
+		<h3><span class="label label-{{type}}">{{todo.tag}}</span>  {{todo.title}}</h3>
+		<br>
+
+
+		
+                       
+		
+		{%if permission.can_update>0 %}
+			<form class="form-horizontal" role="form" method="POST" action="/toDo/progress/{{todo.id}}">{{ csrfField }}
+			Progress <input id="title" type="text" name="progress" required size=5 value='{{todo.progress}}''>%
+            <button type="submit" class="btn btn-primary">
+            	<i class="fa fa-btn fa-user"></i> Save
+			</button>
+		{%else%}
+			Progress {{todo.progress}}%
+		{%endif%}         
+		</form>
+
+		<br><h4>Description</h4>
+				{{todo.description}}
+	</span>
+</div>
+	
+
+	<ul class="nav nav-tabs">   
+    
+
+                    <li><a href="/toDo/"><< Back</a></li>
+                    <li  class=active><a href="#">Comments</a></li>
+                 
+    </ul>
+    <br>
+
+    {% for comment in comments %}
+		{% if comment.person_id<0 %}
+    		<i>{{comment.comment}}</i><br>
+    	{%else%}
+    		<b>{{comment.name}}</b>: {{comment.comment}}<br>
+    	{%endif%}
+    {%endfor%}
+
+    <br>
+
+
+	{%if permission.can_update>0 %}   
+    <form class="form-horizontal" role="form" method="POST" action="/toDo/comment/{{todo.id}}">
+	{{ csrfField }}
+    
+    <input id="title" type="text" class="form-control" name="comment" required>
+    <button type="submit" class="btn btn-primary">
+    	<i class="fa fa-btn fa-user"></i> Comment
+	</button>
+
+	</form>
+	{%endif%}
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+
+
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

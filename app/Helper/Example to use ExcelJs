@@ -1,0 +1,30 @@
+//for controller
+//GetAll(start row data[integer], type[string], callbackOK, callbackError )
+//GetSheet(start row data[integer], type[string], callbackOK, callbackError )
+
+//type = merger / data / header
+
+const Excel = use('App/Helper/Excel')
+
+class ExcelController {
+
+
+
+  * index(request, response) {
+  	const tes = new Excel('1494997683720.xlsx',3);
+
+//  	let a = tes.getSheet(3,'data',function(data) {console.log(data)},function(err) {console.log(err)});
+	let a = tes.getAll('merger',function(data) {console.log(data)},function(err) {console.log(err)})
+
+		let a = tes.getAll('data',
+		function(data) {
+			response.json(data)
+		},
+		function(err) {
+			console.log(err)
+		})
+
+   }
+
+
+module.exports = ExcelController

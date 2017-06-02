@@ -1,0 +1,117 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Template List for Accreditation of {{info.title}}
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li><a href="/accreditationManagement/"><< Back</a></li>
+    <li class="active"><a href="#">Accreditation Info</a></li>
+    <li><a href="/accreditationManagement/template/{{id}}">Template List</a></li>
+    <li {%if tab==1 %}class="active"{%endif%}><a href="/accreditationManagement/addTemplate/{{id}}"><span class="glyphicon glyphicon-plus-sign"></span> Create New Template</a></li>
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+<form class="form-horizontal" role="form" method="POST" action="/accreditationManagement/infoUpdate/{{info.id}}">
+
+                       
+                        {{ csrfField }}
+                       
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Title</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="title" required value={{info.title}}>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="tag" class="col-md-4 control-label">Level</label>
+
+                            <div class="col-md-6">
+                                 <select name="level" required>
+                                 	{% for item in level %}
+                                    <option value="{{item.id}}"
+                                    {% if info.level_id==item.id %}selected{%endif%}
+                                    >{{item.level}}</option>
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Year</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="year" required value={{info.year}}>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Description</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="description" required>{{info.description}}</textarea>
+                            </div>
+                        </div>
+
+                        
+
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Save
+                                </button>
+                            </div>
+                        </div>
+
+
+		        {% if error %}
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+								<div class="alert alert-warning">
+								  <strong>Error!</strong> {{ error }}
+								</div>
+			    			</div>
+						</div>
+				{% endif %}
+				{% if success %}
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+								<div class="alert alert-success">
+								   {{ success }}
+								</div>
+			    			</div>
+						</div>
+				{% endif %}
+                
+                    </form>
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

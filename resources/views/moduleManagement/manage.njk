@@ -1,0 +1,126 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Module Management
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li><a href="/moduleManagement/"><< Back</a></li>
+    <li class="active"><a href="#">Manage Permission of Module {{module.module}}</a></li>
+    
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+<h3>Default Permission</h3>
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>Create</th>
+		<th>Read</th>
+		<th>Update</th>
+		<th>Delete</th>
+		<th></th>
+
+		<tr>
+			<form class="form-horizontal" role="form" method="POST" action="/moduleManagement/updateModule/">
+                      {{ csrfField }}
+			<input type=hidden name=id value={{module.id}} />
+
+			<td><input type=checkbox name=create value=1 {%if module.can_create==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=read value=1 {%if module.can_read==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=update value=1 {%if module.can_update==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=delete value=1 {%if module.can_delete==1%}checked{%endif%}></td>
+			<td><button type="submit" class="btn btn-primary btn-xs">
+                            	<i class="fa fa-btn fa-user"></i> Change
+                            </button>
+                            </td></form>
+			</tr>
+	</tr></thead>
+	<tbody>
+</table>
+
+
+<h3>Custom Permission</h3>
+
+{%if roles!=0%}
+<form class="form-horizontal" role="form" method="POST" action="/moduleManagement/createCustom/">
+{{ csrfField }}
+<input type=hidden name=module_id value={{module.id}} />
+
+Create custom permission for role 
+
+<select name=role_id>       
+{% for query in roles%}
+<option value={{query.role_id}}>{{query.role_name}}</option>
+{%endfor%}                      
+</select>
+                <button type="submit" class="btn btn-primary btn-xs">
+                            	<i class="fa fa-btn fa-user"></i> Create
+                            </button>      
+</form>
+{%endif%}
+
+{%if permission!=0%}                            
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Role</th>
+		<th>Custom Controller</th>
+		<th>C</th>
+		<th>R</th>
+		<th>U</th>
+		<th>D</th>
+		<th></th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for query in permission %}
+		<tr>
+			<form class="form-horizontal" role="form" method="POST" action="/moduleManagement/manage/{{query.module_id}}">
+                      {{ csrfField }}
+			<input type=hidden name=id value={{query.id}} />
+
+			<td>{{i}}</td>
+			<td>{{query.role_name}}</td>
+			<td><input type=text name=custom value={{query.custom}}></td>
+			<td><input type=checkbox name=create value=1 {%if query.can_create==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=read value=1 {%if query.can_read==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=update value=1 {%if query.can_update==1%}checked{%endif%}></td>
+			<td><input type=checkbox name=delete value=1 {%if query.can_delete==1%}checked{%endif%}></td>
+			<td><button type="submit" class="btn btn-primary btn-xs">
+                            	<i class="fa fa-btn fa-user"></i> Change
+                            </button>
+                            </td></form>
+			</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+{%endif%}
+
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

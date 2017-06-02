@@ -1,0 +1,360 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Borang BAN-PT Tingkat Sarjana untuk Program Studi
+	</span>
+</div>
+
+<!--<ul class="nav nav-tabs">
+	<li {%if tab==0 %}class="active"{%endif%}><a href="/userManagement/">Manage Access By Position</a></li>
+    <li {%if tab==2 %}class="active"{%endif%}><a href="/userManagement/index/2">Manage Access By Account</a></li>
+    {%if tab==2 %}<li><a href="/userManagement/addNew/">Add New User</a></li>{%endif%}
+</ul>
+<br>-->
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+ <div class="row">
+  <div class="col-sm-3">
+  	<div>
+        <div class="no-padding well">
+         <div class="panel-group" id="accordion">
+         		<ul class="nav nav-list">
+					<li><label class="tree-toggle nav-header">
+					Create New Section
+				<a href="/accreditationManagement/templateNewSection/{{id}}"
+				 class="glyphicon glyphicon-plus-sign"  data-toggle="tooltip" 
+				title="Add Section"></a> 
+					</li>
+					</ul></div>
+				
+		<div class="panel-group" id="accordion">
+            	{% for item in tree %}
+            		<ul class="nav nav-list">
+					<li><label class="tree-toggle nav-header">{{item.title}} 
+					
+					&nbsp;&nbsp;
+					<a href="/accreditationManagement/editSection/{{item.id}}" class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit"></a>&nbsp;
+					<a href="/accreditationManagement/deleteSection/{{section.id}}" class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></a>&nbsp;
+					<a href="/accreditationManagement/templateNewChildren/{{id}}/{{item.id}}" class="glyphicon glyphicon-plus-sign"  data-toggle="tooltip" title="Add Children"></a>
+					</label>
+						{%if item.children!=null%}
+							<ul class="nav nav-list tree">
+								{% for item2 in item.children %}
+									<li><a href='/accreditationManagement/templateStructure/{{id}}/{{item2.id}}'>{{item2.title}}
+									</a>
+									</li>
+								{%endfor%}
+							</ul>
+						{%endif%}
+					</li>
+					<li class="divider"></li>
+					</ul>
+				{% endfor %}
+            </div>
+	
+	</div></div></div>
+  	<div class="col-sm-9">
+
+
+<h3>{{section.prefix}} {{section.title}}
+{%if section.title != null%}
+<sup>
+					<a href="/accreditationManagement/editSection/{{section.id}}" class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit"></a>&nbsp;
+					<a href="/accreditationManagement/deleteSection/{{section.id}}" class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></a>&nbsp;
+					{% if section.type==null or section.type=='link' %}
+					<a href="/accreditationManagement/templateNewChildren/{{id}}/{{section.id}}" class="glyphicon glyphicon-plus-sign"  data-toggle="tooltip" title="Add Children"></a>
+					{%endif%}</sup>
+{%endif%}
+{% if section.tooltip != null %}
+{% if section.tooltip != "" %}
+<span data-toggle="tooltip" title="{{section.tooltip}}" class="glyphicon glyphicon-question-sign"></span>
+
+{% endif %}{% endif %}
+
+
+</h3>
+{%if section.type=='link' and section.description != ""%}
+{{section.description | safe}}<br><br>{%endif%}
+
+	{%if section.type==null or section.type=='link' %}
+		{% for item in form %}
+			<div class="well no-padding" id={{item.id}}>
+			{{section.prefix}}{{item.title}}
+			<sup>
+					<a href="/accreditationManagement/editSection/{{item.id}}" class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit"></a>&nbsp;
+					<a href="/accreditationManagement/deleteSection/{{item.id}}" class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></a>&nbsp;
+					{% if item.format==null or item.format=='link' %}
+					<a href="/accreditationManagement/templateNewChildren/{{id}}/{{item.id}}" class="glyphicon glyphicon-plus-sign"  data-toggle="tooltip" title="Add Children"></a>
+					{%endif%}</sup>
+			<br><br>
+			{%if item.format==null or item.format=='link'%}
+			{% for item2 in item.children %}
+
+			<!-- start level 2-->
+			<div class="well no-padding" id={{item2.id}}>
+			{{section.prefix}}{{item2.title}}
+			<sup>
+					<a href="/accreditationManagement/editSection/{{item2.id}}" class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit"></a>&nbsp;
+					<a href="/accreditationManagement/deleteSection/{{item2.id}}" class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Remove"></a>&nbsp;
+					{% if item2.format==null or item2.format=='link' %}
+					<a href="/accreditationManagement/templateNewChildren/{{id}}/{{item.id}}" class="glyphicon glyphicon-plus-sign"  data-toggle="tooltip" title="Add Children"></a>
+					{%endif%}</sup>
+			<br><br>
+			{%if item2.format==null or item2.type=='link'%}
+			{%endif%}
+			{%if item2.format=='note'%}
+				<div>
+				{%if item2.description != ""%}
+					{{item2.description | safe}}<br><br>
+					{%endif%}
+
+				<form method="POST" action="/BAN-PT_S1_Prodi/addNote/{{item2.id}}">
+					{{ csrfField }}
+					<input name="content{{item2.id}}" type="hidden">
+      				<div id="editor-container{{item2.id}}" style="background-color: #fff;">
+        
+      				</div>
+    			
+    				<br>
+      				
+    			
+    			</form><button class="btn btn-primary" type="#submit">Save</button>
+    			</div>
+			{%endif%}
+			{%if item2.format=='table'%}
+				<div>
+					{%if item2.description != ""%}
+					{{item2.description | safe}}<br>
+					{%endif%}
+
+
+					{% if item2.columns != null%}
+					<table id="tableView" class="table table-striped user-table">
+    				<thead><tr>
+        				{%for column in item2.columns%}
+        				<th>{{column}}
+        				{%endfor%}
+
+    					</tr></thead>
+    					</table>{%endif%}
+
+					<a href=#>Click here to access table {{section.prefix}}{{item.no}}</a>
+
+
+				</div>
+			{%endif%}
+			</div>
+			<!-- end of level 2-->
+			{% endfor %}
+			{%endif%}
+			{%if item.format=='note'%}
+
+				<div>
+				{%if item.description != ""%}
+					{{item.description | safe}}<br><br>
+					{%endif%}
+
+				<form method="POST" action="/BAN-PT_S1_Prodi/addNote/{{item.id}}">
+					{{ csrfField }}
+					<input name="content{{item.id}}" type="hidden">
+      				<div id="editor-container{{item.id}}" style="background-color: #fff;">
+        
+      				</div>
+    			
+    				<br>
+      				
+    			
+    			</form><button class="btn btn-primary" type="#submit">Save</button>
+    			</div>
+			{%endif%}
+			{%if item.format=='table'%}
+				<div>
+					{%if item.description != ""%}
+					{{item.description | safe}}<br>
+					{%endif%}
+
+
+					{% if item.columns != null%}
+					<table id="tableView" class="table table-striped user-table">
+    				<thead><tr>
+        				{%for column in item.columns%}
+        				<th>{{column}}
+        				{%endfor%}
+
+    					</tr></thead>
+    					</table>{%endif%}
+
+					<a href=#>Click here to access table {{section.prefix}}{{item.no}}</a>
+
+
+				</div>
+			{%endif%}
+			</div>
+		{%endfor%}
+	{% endif %}
+
+	{%if section.type=='note' %}
+		<div class="well no-padding" id={{section.id}}>
+			{{section.description | safe}}
+			<br><br>
+			<div>
+				<form method="POST" action="/BAN-PT_S1_Prodi/addNote/{{section.id}}">
+					{{ csrfField }}
+					<input name="content" type="hidden">
+      				<div id="editor-container" style="background-color: #fff;">
+        				
+      				</div>
+    			
+    				<br>
+      				
+    			
+    			</form><button class="btn btn-primary" type="submit">Save</button>
+    			</div>
+				<!--<textarea></textarea><br><button>Save</button>-->
+		</div>
+	{% endif %}
+
+	{%if section.type=='table' %}
+		<div class="well no-padding" id={{section.id}}>
+		{%if section.description!=""%}
+			{{section.description | safe}}<br>{%endif%}
+			
+			{% if section.columns != null%}
+			<table id="tableView" class="table table-striped user-table">
+    			<thead><tr>
+        				{%for item in section.columns%}
+        				<th>{{item}}
+        				{%endfor%}
+
+    					</tr></thead>
+    					</table>
+    					{%endif%}
+    					<a href=#>Click here to access table {{section.no}}</a>
+		</div>
+	{% endif %}
+{% endif %}
+</div>
+</div>
+
+</div></div></div></div>
+
+
+{% endblock %}
+
+
+{% block js %}
+	<script src="//cdn.quilljs.com/1.2.3/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.2.3/quill.min.js"></script>
+    <link href="//cdn.quilljs.com/1.2.3/quill.snow.css" rel="stylesheet">
+
+	<script type="text/javascript">
+	{%if form==null%}
+		var quill = new Quill('#editor-container', {
+            modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block', 'image'],
+                [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+            },
+            placeholder: 'Write the text here...',
+            theme: 'snow'
+        });
+//        quill{{item.no}}.setContents({{content[0].content | safe }})
+
+        /*var form{{item.no}} = document.querySelector('form');
+            form{{item.no}}.onsubmit = function() {
+            // Populate hidden form on submit
+            var about = document.querySelector('input[name=content{{item.no}}]');
+            about.value = JSON.stringify(quill.getContents());
+  
+            console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+  
+            // No back end to actually submit to!
+            //alert('Open the console to see the submit data!')
+            //return false;
+        };*/
+	{%endif%}
+	{%for item in form%}
+		{%if item.format=='link'%}
+			{%for item2 in item.children%}
+				{%if item2.format=='note'%}
+					var quill{{item2.id}} = new Quill('#editor-container{{item2.id}}', {
+            			modules: {
+            			toolbar: [
+                			['bold', 'italic'],
+                			['link', 'blockquote', 'code-block', 'image'],
+                			[{ list: 'ordered' }, { list: 'bullet' }]
+                			]
+            			},
+            			placeholder: 'Write the text here...',
+            			theme: 'snow'
+        			});
+        			quill{{item2.id}}.setContents({{content[0].content | safe }})
+
+        			/*var form{{item2.no}} = document.querySelector('form');
+            		form{{item.no}}.onsubmit = function() {
+            		// Populate hidden form on submit
+            		var about = document.querySelector('input[name=content{{item2.no}}]');
+            		about.value = JSON.stringify(quill.getContents());
+  
+            		console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+  
+            		// No back end to actually submit to!
+            		//alert('Open the console to see the submit data!')
+            		//return false;
+        			};*/
+				{%endif%}
+			{%endfor%}
+		{%endif%}
+		{%if item.format=='note'%}
+	    var quill{{item.id}} = new Quill('#editor-container{{item.id}}', {
+            modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block', 'image'],
+                [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+            },
+            placeholder: 'Write the text here...',
+            theme: 'snow'
+        });
+        quill{{item.id}}.setContents({{content[0].content | safe }})
+
+        /*var form{{item.no}} = document.querySelector('form');
+            form{{item.no}}.onsubmit = function() {
+            // Populate hidden form on submit
+            var about = document.querySelector('input[name=content{{item.no}}]');
+            about.value = JSON.stringify(quill.getContents());
+  
+            console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+  
+            // No back end to actually submit to!
+            //alert('Open the console to see the submit data!')
+            //return false;
+        };*/
+        {%endif%}
+        {%endfor%}
+	</script>
+{% endblock %}

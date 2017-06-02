@@ -1,0 +1,27 @@
+{% extends 'master' %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <div class="__banner">
+    <div class="banner__inner">
+      <img src="/assets/logo.svg">
+      <!--<h2>Practical <span>Reliable</span> Productive</h2>-->
+
+	<h2>Educational Quality Assurance</h2>
+        {% if not currentUser %}
+		<a href="login" class="btn btn-large btn-primary">Sign In</a>
+	{% else %}
+		<a href="" class="btn btn-large btn-success">Go to the Admin area</a>
+	{% endif %}
+
+	
+
+    </div>
+  </div>
+
+
+<div class="jumbotron" text-align="center">
+
+
+</div>
+{% endblock %}

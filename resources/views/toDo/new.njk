@@ -1,0 +1,109 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+<div class="well shallow-well">
+    <span class="filter-link-list">
+        ToDo List
+    </span>
+</div>
+
+<ul class="nav nav-tabs">   
+    
+
+                    <li><a href="/toDo/">ToDo List</a></li>
+                    <li  class=active><a href="/toDo/addNew/">Add New</a></li>
+    
+    
+    </ul>
+    <br>
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+                    <form class="form-horizontal" role="form" method="POST" action="/toDo/addNew/">
+
+                       
+                        {{ csrfField }}
+                       
+
+
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Title</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control" name="title" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="tag" class="col-md-4 control-label">Tag</label>
+
+                            <div class="col-md-6">
+                                 <select name="tag" required>
+                                    <option value="Manager Project">Manager Project</option>
+                                    <option value="Programmer">Programmer</option>
+                                    <option value="UI Programmer">UI Programmer</option>
+                                </select> 
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customtag" class="col-md-4 control-label">Custom Tag</label>
+
+                            <div class="col-md-6">
+                                <input id="customtag" type="text" class="form-control" name="customtag">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-md-4 control-label">Description</label>
+
+                            <div class="col-md-6">
+                                <textarea id="description" class="form-control" name="description" required></textarea>
+                            </div>
+                        </div>
+
+                        
+
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i> Save
+                                </button>
+                            </div>
+                        </div>
+
+
+		        {% if error %}
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+								<div class="alert alert-warning">
+								  <strong>Error!</strong> {{ error }}
+								</div>
+			    			</div>
+						</div>
+				{% endif %}
+                
+                    </form>
+{%endif%}
+</div></div></div></div>
+{% endblock %}

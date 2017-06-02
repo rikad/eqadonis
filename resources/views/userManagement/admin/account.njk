@@ -1,0 +1,73 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Role Access Management of {{person.name}}
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li><a href="/userManagement/person/{{person.id}}/2">
+		<< Go Back</a>
+	</li>
+	<li class="active"><a href=#>
+		Manage Position Access for {{user.username}}</a>
+	</li>
+</ul>
+<br>
+
+
+{%if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+
+{% else %}
+
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Position</th>
+		<th>Organization</th>
+		<th>canAccess?</th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for officer in officers %}
+		
+		<tr>
+			
+			<td>{{i}}</td>
+			<td>{{officer.position}}</td>
+			<td>{{officer.organization}}</td>
+			{% if officer.id==null %}
+				<td><a href="/userManagement/accountGrant/{{officer.officer_id}}/{{user_id}}/{{person.id}}" class="label label-danger">Cannot access. Give permission?</a></td>
+			{% else %}
+				<td><a href="/userManagement/accountRevoke/{{officer.id}}/{{user_id}}/{{person.id}}" class="label label-success">Can access. Revoke permission?</a></td>
+			{% endif %}
+			
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Template List for Accreditation of {{info.title}}
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li><a href="/accreditation/"><< Back</a></li>
+    <li class="active"><a href="#">Template List</a></li>
+</ul>
+<br>
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+
+<h3>Accreditation Template List of {{accreditation.title}} - S{{accreditation.level_id}}</h3>
+{%if tab==0 or tab==null %}
+<table id="tableView" class="table table-striped user-table">
+    <thead><tr>
+        <th>No</th>
+        <th>Organization Level</th>
+        <th>Description</th>
+        <th></th>
+    </tr></thead>
+    <tbody>
+        {% set i=1 %}
+        {% if list==null %}
+            <tr><td>Data Empty</tr>
+        {%else%}
+            {% for item in list %}
+        
+            <tr>
+                {% set link='/accreditation/templateStructure/'+item.document_id %}
+                <td>{{i}}</td>
+                <td>{{item.form}}</td>
+                <td>{{item.description}}</td>
+                <td>
+                {%if item.document_id==null%}
+                <a href='/accreditation/signDocument/{{item.id}}' class="label label-danger">Not yet created. Create Now?</a>
+                {%else%}
+                <a href='{{link}}' class="label label-success">Manage</a> 
+                {%endif%}
+
+                <!--<a href='{{link}}' class="label label-success">Manage</a> 
+                <a href='/accreditation/infoTemplate/{{item.id}}' class="label label-warning">Edit Info</a> 
+                <a href='/accreditation/deleteTemplate/{{item.id}}' class="label label-danger">Delete</a></td>-->
+            </tr>
+            {% set i=i+1 %}
+            {% endfor %}
+        {%endif%}
+    </tbody>
+    </table>
+{% endif %}
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}

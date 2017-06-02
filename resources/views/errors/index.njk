@@ -1,0 +1,23 @@
+{% extends 'master' %}
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      {% if link== null %}
+      {% set link="/" %}
+      {%endif%}
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+  </div></div></div></div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+	<div class="container-fluid">
+	    <style>
+.filter-link-list a.active { text-decoration: underline; cursor: default; }
+.user-table th.id { width: 3em; }
+.user-table th.last-login { width: 11em; }
+.user-table th.status { width: 10em; }
+</style>
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		Username starts with: <a href="http://localhost/admin/settings/users/index/first_letter-A" class="">A</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-B" class="">B</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-C" class="">C</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-D" class="">D</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-E" class="">E</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-F" class="">F</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-G" class="">G</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-H" class="">H</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-I" class="">I</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-J" class="">J</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-K" class="">K</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-L" class="">L</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-M" class="">M</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-N" class="">N</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-O" class="">O</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-P" class="">P</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-Q" class="">Q</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-R" class="">R</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-S" class="">S</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-T" class="">T</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-U" class="">U</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-V" class="">V</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-W" class="">W</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-X" class="">X</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-Y" class="">Y</a>
+<a href="http://localhost/admin/settings/users/index/first_letter-Z" class="">Z</a>
+	</span>
+</div>
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="users/index/">All Users</a></li>
+    <li><a href="users/index/inactive">Inactive</a></li>
+    <li><a href="users/index/banned">Banned</a></li>
+    <li><a href="users/index/deleted">Deleted</a></li>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			By Role			<span class="caret light-caret"></span>
+		</a>
+		<ul class="dropdown-menu">
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-1">Administrator</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-6">Developer</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-2">Editor</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-19">EQA_Curriculum</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-18">EQA_Fakultas</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-8">EQA_Prodi</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-9">EQA_Reviewer</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-7">EQA_SPM</a></li>
+			            <li><a href="http://localhost/admin/settings/users/index/role_id-4">User</a></li>
+					</ul>
+	</li>
+    <li><a href="users/add">Add New User</a></li>
+</ul>
+<br>
+                      <table id="tableView" class="table table-striped user-table">
+			  <thead><tr>
+			      <th class="column-check"><input class="check-all" type="checkbox" /></th>
+                              <th>ID</th>
+                              <th>Username</th>
+                              <th>Display Name</th>
+                              <th>Email</th>
+                              <th>Role</th>
+                              <th>Last Login</th>
+                              <th>Status</th>
+                          </tr></thead>
+			<tbody>
+			  {% for user in users %}
+                            <tr>
+			      <td class="column-check"><input type=checkbox name=checked[] value="{{ user.id }}" /></th>
+                              <td>{{user.id}}</td><td><a href="/user/edit/{{ user.id }}">{{ user.username }}</a></td>
+                              <td>{{ user.display_name }}</td><td>{{ user.email }}</td>
+                              <td>{{ user.role_id }}</td><td>{{ user.last_login }}</td>
+				{% if user.active==1 %}
+	                              	<td><span class="label label-success">Active</span></td>
+				{% else %}
+					<td><span class="label label-default">Inactive</span></td>
+				{% endif %}
+                            </tr>
+                          {% endfor %}
+			</tbody>
+		</table>
+</div></div>
+{% endblock %}

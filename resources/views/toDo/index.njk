@@ -1,0 +1,79 @@
+{% extends 'master' %}
+
+
+{% block content %}
+<div class="body">
+<div class="container">
+    <div class="row">
+
+	<div class="container-fluid">
+
+
+<div class="well shallow-well">
+	<span class="filter-link-list">
+		ToDo List
+	</span>
+</div>
+
+<ul class="nav nav-tabs">   
+    
+
+                    <li class=active><a href="/toDo/">ToDo List</a></li>
+                    {%if permission.can_create>0 %}<li><a href="/toDo/addNew/">Add New</a></li>{%endif%}
+                 
+    </ul>
+    <br>
+
+
+{% if error!=null %}
+<div class="alert alert-danger">
+  <div class="__banner">
+    <div class="banner__inner">
+      <h1>{{error}}</h1>
+      <p> Something bad happened! <a href="{{link}}">Go Back</a> </p>
+    </div>
+  </div>
+  </div>
+
+{%else%}
+
+
+<table id="tableView" class="table table-striped user-table">
+	<thead><tr>
+		<th>No</th>
+		<th>Title</th>
+		<th>Description</th>
+		<th>% Progress</th>
+		<th>Manage</th>
+	</tr></thead>
+	<tbody>
+		{% set i=1 %}
+		{% for todo in todos %}
+		
+		<tr>
+			{% set link='/toDo/detail/'+todo.id %}
+			<td>{{i}}</td>
+			{% if todo.tag_id%3 == 0 %}
+				{% set type = 'success' %}
+			{% elif todo.tag_id%3 == 1 %}
+				{% set type = 'warning' %}
+			{% else %}
+				{% set type = 'danger' %}
+			{% endif %}
+
+			<td><span class="label label-{{type}}">{{todo.tag}}</span> <a href='{{link}}'>{{todo.title}}</a></td>
+			<td>{{todo.description}}</td>
+			<td>{{todo.progress}}%</td>
+			<td><a href='{{link}}' class="label label-success">Manage</a>
+			{%if permission.can_delete>0 %}<a href='/toDo/delete/{{todo.id}}' class="label label-danger">Delete</a>{%endif%}
+			</td>
+		</tr>
+		{% set i=i+1 %}
+		{% endfor %}
+	</tbody>
+	</table>
+
+{% endif %}
+
+</div></div></div></div>
+{% endblock %}
